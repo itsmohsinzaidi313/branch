@@ -1,0 +1,12 @@
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.csproj.AssemblyReference.cache
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.GeneratedMSBuildEditorConfig.editorconfig
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.AssemblyInfoInputs.cache
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.AssemblyInfo.cs
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.csproj.CoreCompileInputs.cache
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/bin/Debug/net5.0/Branch.deps.json
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/bin/Debug/net5.0/Branch.dll
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/bin/Debug/net5.0/ref/Branch.dll
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/bin/Debug/net5.0/Branch.pdb
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.dll
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/ref/Branch.dll
+/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/Debug/net5.0/Branch.pdb

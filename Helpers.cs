@@ -1,0 +1,291 @@
+﻿using Branch.Classes;
+using Branch.Classes.Discounts;
+using Branch.Classes.Menu;
+using POSDatabaseModel;
+using POSDatabaseModel.Models;
+using RMSEnumerations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace Branch
+{
+    internal static class Helpers
+    {
+        internal static int GetNewOrderNumber(bool uniquePerDay = false)
+        {
+            using POSContext context = new Database().Context;
+            if (uniquePerDay)
+            {
+                return context.DbSalesMaster
+                    .Count(x => x.SaleDate == DateTime.Now) + 1;
+            }
+            return context.DbSalesMaster.Max(x => x.OrderNo) + 1;
+        }
+        internal static int GetNewRandomOrderNumber()
+        {
+            using (POSContext context = new Database().Context)
+            {
+                var random = new Random();
+                int orderNo = 0;
+                while (context.DbSalesMaster.Where(x => x.OrderNo == orderNo).Count() >= 1)
+                {
+                    orderNo = random.Next(100000, 999999);
+                }
+                return orderNo;
+            }
+        }
+        internal static DbDayLogs GetDay()
+        {
+            using var context = new Database().Context;
+            return (from x in context.DbDayLogs where x.Closed == false select x).FirstOrDefault();
+        }
+        internal static DbShiftLogs GetShift()
+        {
+            using var context = new Database().Context;
+            return (from x in context.DbShiftLogs where x.Closed == false select x).FirstOrDefault();
+        }
+        internal static int GetNewTokenNumber()
+        {
+            using (POSContext context = new Database().Context)
+            {
+                return context.DbSalesMaster.Where(x => x.SaleDate == DateTime.Now).Max(x => x.TokenNo) + 1;
+            }
+        }
+        internal static int GetNewRandomTokenNumber()
+        {
+            using (POSContext context = new Database().Context)
+            {
+                var random = new Random();
+                int tokenNo = 0;
+                while (context.DbSalesMaster.Where(x => x.SaleDate == DateTime.Now && x.TokenNo == tokenNo).Count() >= 1)
+                {
+                    tokenNo = random.Next(100000, 999999);
+                }
+                return tokenNo;
+            }
+        }
+        internal static DbBranch GetBranch()
+        {
+            using POSContext context = new Database().Context;
+            return (from DbBranch x in context.DbBranch select x).FirstOrDefault();
+        }
+        internal static DbTables GetTable(int tableId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbTables x in context.DbTables where x.Id == tableId select x).FirstOrDefault();
+        }
+        internal static DbRiders GetRider(int riderId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbRiders x in context.DbRiders where x.Id == riderId select x).FirstOrDefault();
+        }
+        internal static DbUsers GetUser(int userId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbUsers x in context.DbUsers where x.Id == userId select x).FirstOrDefault();
+        }
+        internal static DbWaiters GetWaiter(int waiterId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbWaiters x in context.DbWaiters where x.Id == waiterId select x).FirstOrDefault();
+        }
+        internal static Commission GetCommissionObj(int commissionId, double commissionAmount, double commissionPercentage)
+        {
+            var commission = new Commission { CommissionId = commissionId };
+            if (commissionAmount > 0)
+            {
+                commission.Amount = commissionAmount;
+                commission.AmountUnit = Units.Amount;
+            }
+            else if (commissionPercentage > 0)
+            {
+                commission.Amount = commissionPercentage;
+                commission.AmountUnit = Units.Percentage;
+            }
+            else
+            {
+                commission.Amount = 0;
+                commission.AmountUnit = Units.Amount;
+            }
+            return commission;
+        }
+        internal static DbTaxes GetDbTax()
+        {
+            using POSContext context = new Database().Context;
+            return (from DbTaxes x in context.DbTaxes
+                    where x.Enabled == true
+                    select x).FirstOrDefault();
+        }
+        internal static Tax GetTax()
+        {
+            using POSContext context = new Database().Context;
+            return (from DbTaxes x in context.DbTaxes
+                    where x.Enabled == true
+                    select new Tax
+            {
+                TaxId = x.Id,
+                Name = x.Name,
+                
+            }).FirstOrDefault();
+        }
+        internal static DbCustomers GetCustomer(int customerId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbCustomers x in context.DbCustomers where x.Id == customerId select x).FirstOrDefault();
+        }
+        internal static DbDiscounts GetDiscount(int discountId)
+        {
+            using POSContext context = new Database().Context;
+            return (from DbDiscounts x in context.DbDiscounts where x.Id == discountId select x).FirstOrDefault();
+        }
+        internal static int GetMenuDetailsId(int itemId, POSContext context)
+        {
+            return (from DbMenu x in context.DbMenus
+                    join a in context.DbMenuDetails on x.Id equals a.MenuId
+                    where x.Enabled == true
+                    select a.Id).FirstOrDefault();
+        }
+        internal static List<DbMenuAddons> GetMenuAddons(int itemId, POSContext context, bool includeDisabled = true)
+        {
+            var list  = (from x in context.DbMenuAddons
+                    where x.MenuId == itemId
+                    select x).ToList();
+            if (!includeDisabled)
+                list = (from x in list
+                        where x.Enabled == true
+                        select x).ToList();
+            return list;
+                
+
+        }
+        internal static List<Deal> GetMenuDeals(int orderNo, POSContext context, bool includeDisabled = true)
+        {
+            var tax = GetDbTax();
+            var list = (from x in context.DbSalesMaster
+                        join a in context.DbSalesDetails on x.Id equals a.SalesMasterId
+                        join b in context.DbMenus on a.MenuId equals b.Id
+                        join c in context.DbMenuDetails on a.MenuDetailsId equals c.Id
+                        join d in context.DbCategories on b.CategoryId equals d.Id
+                        where x.OrderNo == orderNo
+                        select new Deal
+                        {
+                            ItemId = a.MenuId,
+                            Name = b.Name,
+                            UnitPrice = c.Price,
+                            Quantity = a.Quantity,
+                            Category = new Classes.Category
+                            {
+                                Id = d.Id,
+                                Name = d.Name,
+                            },
+                            Discount = GetItemDiscount(c.DiscountAmount, c.DiscountPercentage),
+                            DealItems = GetOrderDealItems(a.Id, context),
+                            Addons = GetOrderAddons(a.Id, context),
+                            Canceled = a.Canceled,
+                            Tax = new Classes.Tax
+                            {
+                                Percentage = tax.Percentage,
+                            }
+
+                        }).ToList();
+            if (!includeDisabled)
+                return (from x in list where x.Canceled == false select x).ToList();
+            else
+                return list;
+        }
+        internal static List<DealItem> GetOrderDealItems(int detailId, POSContext context)
+        {
+            var tax = GetDbTax();
+            return (from x in context.DbSalesDetails
+                    join b in context.DbMenuDetails on x.MenuDetailsId equals b.Id
+                    join c in context.DbSalesDealItems on x.Id equals c.SalesDetailId
+                    join d in context.DbMenus on c.MenuId equals d.Id
+                    where x.Id == detailId && d.ItemType == ItemType.Deal
+                    select new DealItem
+                    {
+                        ItemId = d.Id,
+                        Name = d.Name,
+                        Discount = GetItemDiscount(b.DiscountAmount, b.DiscountPercentage),
+                        Quantity = x.Quantity,
+                        Choice = c.Choice,
+                        UnitPrice = b.Price,
+                        Tax = new Classes.Tax
+                        {
+                            Percentage = tax.Percentage,
+                        }
+                    }).ToList();
+        }
+        internal static List<Addon> GetOrderAddons(int detailId, POSContext context)
+        {
+            return (from x in context.DbSalesDetails
+                    join b in context.DbSalesAddons on x.Id equals b.SalesDetailId
+                    join c in context.DbMenuAddons on b.MenuAddonId equals c.Id
+                    where x.Id == detailId
+                    select new Addon
+                    {
+                        AddonId = b.MenuAddonId,
+                        Name = c.Name,
+                        Price = c.Price,
+                        Selected = true,
+
+                    }).ToList();
+        }
+        internal static ItemDiscount GetItemDiscount(double amount, double percentage)
+        {
+            var discount = new ItemDiscount();
+            if (percentage > 0)
+            {
+                discount.Amount = percentage;
+                discount.AmountUnit = Units.Percentage;
+            }
+            else if (amount > 0)
+            {
+                discount.Amount = amount;
+                discount.AmountUnit = Units.Amount;
+            }
+            else
+            {
+                discount.Amount = 0;
+                discount.AmountUnit = Units.Undefined;
+            }
+            return discount;
+        }
+        internal static List<DealItem> GetDealItems(int menuId, bool includeDisabled = true)
+        {
+            var tax = GetDbTax();
+            using var context = new Database().Context;
+            var list = (from x in context.DbMenus
+                        join a in context.DbMenuDealItems on x.Id equals a.MenuId
+                        join b in context.DbMenuDetails on a.MenuId equals b.MenuId
+                        join c in context.DbMenuAddons on x.Id equals c.MenuId
+                        where x.Id == menuId
+                        select new DealItem
+                        {
+                            ItemId = x.Id,
+                            Name = x.Name,
+                            UnitPrice = b.Price,
+                            Quantity = 1,
+                            Category = (from xx in context.DbCategories where xx.Id == x.CategoryId select new Category { Id = xx.Id, Name = xx.Name, }).FirstOrDefault(),
+                            Choice = a.Choice,
+                            Discount = GetItemDiscount(x.DiscountAmount, x.DiscountPercentage),
+                            Tax = new Tax { TaxId = tax.Id, Percentage = tax.Percentage },
+                            Canceled = false,
+                            Addons = (from xx in GetMenuAddons(x.Id, context, false) select new Addon { AddonId = xx.Id, Name = xx.Name, Price = xx.Price, Canceled = false, Selected = false }).ToList()
+                        }).ToList();
+            return list;
+        }
+        internal static DbCategories GetCategories(int categoryId, POSContext context) => context.Find<DbCategories>(categoryId);
+        internal static Counter GetCounter(POSContext context)
+        {
+            return (from x in context.DbCounters where x.Name == Environment.MachineName select new Counter
+            {
+                Id = x.Id,
+                Name = x.Name,
+                UUID = x.UUID,
+                Enabled = x.Enabled
+            }).FirstOrDefault();
+        }
+        
+    }
+}
