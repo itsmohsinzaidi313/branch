@@ -13,7 +13,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
-    <PackageReference Include="POSDatabaseModel" Version="0.0.1" />
+    <PackageReference Include="POSDatabaseModel" Version="0.0.8" />
+    <PackageReference Include="RMSEnumerations" Version="1.0.10" />
   </ItemGroup>
 
 </Project>

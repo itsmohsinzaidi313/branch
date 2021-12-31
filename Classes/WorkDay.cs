@@ -8,7 +8,6 @@ namespace Branch.Classes
 {
     public class WorkDay
     {
-        public int DayId { get; set; }
         public string DayNumber { get; set; }
     }
 }

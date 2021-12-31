@@ -157,7 +157,7 @@ namespace Branch.Classes
         {
             ValidateItem(menuItem);
             if (Items.Exists(x => x.Equals(menuItem)))
-                Items.Find(x => x.ItemId == menuItem.ItemId).Quantity++;
+                Items.Find(x => x.Name == menuItem.Name).Quantity++;
             else
                 Items.Add(menuItem);
         }
@@ -166,7 +166,7 @@ namespace Branch.Classes
             ValidateItem(menuItem);
             if (Items.Exists(x => x.Equals(menuItem)))
             {
-                var item = Items.Find(x => x.ItemId == menuItem.ItemId);
+                var item = Items.Find(x => x.Name == menuItem.Name);
                 if (item.Quantity > 0)
                     item.Quantity--;
             }
@@ -174,15 +174,15 @@ namespace Branch.Classes
         public void RemoveItem(MenuItem menuItem)
         {
             ValidateItem(menuItem);
-            if (Items.Exists(x => x.ItemId == menuItem.ItemId))
-                Items.Remove(Items.Find(x => x.ItemId == menuItem.ItemId));
+            if (Items.Exists(x => x.Name == menuItem.Name))
+                Items.Remove(Items.Find(x => x.Name == menuItem.Name));
         }
-        public void SetQuantity(int itemId, double quantity)
+        public void SetQuantity(string name, double quantity)
         {
-            if (itemId <= 0 || quantity <= 0)
+            if (string.IsNullOrEmpty(name) || quantity <= 0)
                 throw new Exception(ExceptionMessages.ErrorSetItemQuantity);
-            if (Items.Exists(x => x.ItemId == itemId))
-                Items.Find(x => x.ItemId == itemId).Quantity = quantity;
+            if (Items.Exists(x => x.Name == name))
+                Items.Find(x => x.Name == name).Quantity = quantity;
         }
         public void Save()
         {
@@ -191,7 +191,7 @@ namespace Branch.Classes
         }
         private void ValidateItem(MenuItem menuItem)
         {
-            if (menuItem is null || string.IsNullOrEmpty(menuItem.Name) || menuItem.Quantity <= 0 || menuItem.Category.Id <= 0 || menuItem.ItemId <= 0 || menuItem.UnitPrice <= 0 || menuItem.Category.Id == 0 || string.IsNullOrEmpty(menuItem.Category.Name))
+            if (menuItem is null || string.IsNullOrEmpty(menuItem.Name) || menuItem.Quantity <= 0 || menuItem.UnitPrice <= 0 || string.IsNullOrEmpty(menuItem.Category.Name))
                 throw new ItemException(ExceptionMessages.InvalidItem);
         }
         private void ValidateSaveOrder()
@@ -204,11 +204,11 @@ namespace Branch.Classes
                 throw new OrderSaveException(ExceptionMessages.MissingOrderNo);
             if (TokenNo == 0)
                 throw new OrderSaveException(ExceptionMessages.MissingTokenNo);
-            if (Counter is null || Counter.Id == 0 || string.IsNullOrEmpty(Counter.Name))
+            if (Counter is null || string.IsNullOrEmpty(Counter.Name))
                 throw new OrderSaveException(ExceptionMessages.MissingCounter);
-            if (User is null || User.Id == 0 || string.IsNullOrEmpty(User.Name))
+            if (User is null || string.IsNullOrEmpty(User.Name))
                 throw new OrderSaveException(ExceptionMessages.MissingUser);
-            if (Shift is null || Shift.ShiftId == 0 || string.IsNullOrEmpty(Shift.ShiftNumber))
+            if (Shift is null || string.IsNullOrEmpty(Shift.ShiftNumber))
                 throw new OrderSaveException(ExceptionMessages.MissingShift);
 
             switch (OrderType)
@@ -216,7 +216,7 @@ namespace Branch.Classes
                 case OrderType.Undefined:
                     throw new OrderSaveException(ExceptionMessages.MissingOrderType);
                 case OrderType.DineInIndoor:
-                    if (Waiter is null || Waiter.Id == 0 || string.IsNullOrEmpty(Waiter.Name) || Table.TableId == 0 || string.IsNullOrEmpty(Table.Name))
+                    if (Waiter is null || string.IsNullOrEmpty(Waiter.Name) || string.IsNullOrEmpty(Table.Name))
                         throw new OrderSaveException(ExceptionMessages.MissingWaiter);
                     break;
                 case OrderType.DineInOutdoor:

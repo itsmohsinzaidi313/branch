@@ -8,7 +8,6 @@ namespace Branch.Classes
 {
     public class Shift
     {
-        public int ShiftId { get; set; }
         public string ShiftNumber { get; set; }
     }
 }

@@ -28,19 +28,12 @@ namespace Branch
                 OrderNo = Helpers.GetNewOrderNumber(),
                 TokenNo = Helpers.GetNewTokenNumber(),
                 BillCreated = false,
-                CustomerId = order.Customer.Id,
                 NetAmount = order.NetAmount,
                 SubTotal = order.SubTotal,
                 PaymentMode = order.PaymentMode,
                 SaleDate = order.OrderDate,
-                DiscountId = order.Discount.DiscountId,
                 TaxId = Helpers.GetDbTax().Id,
                 OrderType = order.OrderType,
-                RiderId = order.Rider.RiderId,
-                TableId = order.Table.TableId,
-                UsersId = order.User.Id,
-                WaiterId = order.Waiter.Id,
-                CounterId = order.Counter.Id,
                 OrderStatus = OrderStatus.Pending,                
             };
             context.DbSalesMaster.Add(master);
@@ -50,9 +43,7 @@ namespace Branch
             {
                 SalesMasterId = master.Id,
                 Quantity = x.Quantity,
-                MenuId = x.ItemId,
                 Canceled = false,
-                MenuDetailsId = Helpers.GetMenuDetailsId(x.ItemId, context)
             }));
             context.SaveChanges();
         }
@@ -69,7 +60,6 @@ namespace Branch
             var master = (from DbSalesMaster x in context.DbSalesMaster
                           where x.OrderNo == orderNo
                           select x).FirstOrDefault();
-            master.CustomerId = customer.Id;
             context.SaveChanges();
         }
         public static void ChangeWaiter(int orderNo, Waiter waiter)
@@ -78,7 +68,6 @@ namespace Branch
             var master = (from DbSalesMaster x in context.DbSalesMaster
                           where x.OrderNo == orderNo
                           select x).FirstOrDefault();
-            master.WaiterId = waiter.Id;
             context.SaveChanges();
         }
         public static void ChangeTable(int orderNo, Table table)
@@ -87,7 +76,6 @@ namespace Branch
             var master = (from DbSalesMaster x in context.DbSalesMaster
                           where x.OrderNo == orderNo
                           select x).FirstOrDefault();
-            master.TableId = table.TableId;
             context.SaveChanges();
         }
         public static void ChangeRider(int orderNo, Rider rider)
@@ -96,7 +84,6 @@ namespace Branch
             var master = (from DbSalesMaster x in context.DbSalesMaster
                           where x.OrderNo == orderNo
                           select x).FirstOrDefault();
-            master.RiderId = rider.RiderId;
             context.SaveChanges();
         }
         public static void ChangeCounter(int orderNo, int counterId)
@@ -118,9 +105,9 @@ namespace Branch
 
                 dbDetail.ForEach(x =>
                 {
-                    if (order.Items.Exists(a => a.ItemId == x.MenuId))
+                    if (order.Items.Exists(a => a.Name == x.MenuDetails.Menu.Name))
                     {
-                        var item = (from a in order.Items where a.ItemId == x.MenuId select x).FirstOrDefault();
+                        var item = (from a in order.Items where a.Name == x.MenuDetails.Menu.Name select x).FirstOrDefault();
                         double qtyDiff = item.Quantity - x.Quantity;
                         if (qtyDiff > 0)
                         {
@@ -143,7 +130,7 @@ namespace Branch
 
                 dbDetail.ForEach(x =>
                 {
-                    if (!order.Items.Exists(a => a.ItemId == x.MenuId))
+                    if (!order.Items.Exists(a => a.Name == x.MenuDetails.Menu.Name))
                     {
                         x.Canceled = true;
                     }
@@ -157,16 +144,16 @@ namespace Branch
                                 select x).FirstOrDefault();
 
                 var dbDetail = (from x in context.DbSalesDetails
-                                join a in context.DbMenus on x.MenuId equals a.Id
+                                join a in context.DbMenus on x.MenuDetails.MenuId equals a.Id
                                 where (x.SalesMasterId == dbMaster.Id) && (a.ItemType == ItemType.Deal)
                                 select x)
                                 .ToList();
 
                 dbDetail.ForEach(x =>
                 {
-                    if (order.Items.Exists(a => a.ItemId == x.MenuId))
+                    if (order.Items.Exists(a => a.Name == x.MenuDetails.Menu.Name))
                     {
-                        var item = (from a in order.Items where a.ItemId == x.MenuId select x).FirstOrDefault();
+                        var item = (from a in order.Items where a.Name == x.MenuDetails.Menu.Name select x).FirstOrDefault();
                         double qtyDiff = item.Quantity - x.Quantity;
                         if (qtyDiff > 0)
                         {
@@ -189,7 +176,7 @@ namespace Branch
 
                 dbDetail.ForEach(x =>
                 {
-                    if (!order.Items.Exists(a => a.ItemId == x.MenuId))
+                    if (!order.Items.Exists(a => a.Name == x.MenuDetails.Menu.Name))
                     {
                         x.Canceled = true;
                     }
@@ -225,7 +212,7 @@ namespace Branch
             {
                 detail.ForEach(xx => 
                 {
-                    if (x == xx.MenuId)
+                    if (x == xx.MenuDetails.MenuId)
                         xx.Printed = true;
                 });
             });

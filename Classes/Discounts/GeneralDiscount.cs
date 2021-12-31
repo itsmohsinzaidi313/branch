@@ -9,7 +9,7 @@ namespace Branch.Classes.Discounts
 {
     public class GeneralDiscount : Discount
     {
-        public int DiscountId { get; set; }
+        public string Name { get; set; }
         public override double Amount { get; set; }
         public override Units AmountUnit { get; set; } = Units.Percentage;
         public DateTime From { get; set; }

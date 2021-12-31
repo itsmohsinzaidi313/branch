@@ -90,9 +90,9 @@ namespace Branch
             using POSContext context = new Database().Context;
             return (from DbWaiters x in context.DbWaiters where x.Id == waiterId select x).FirstOrDefault();
         }
-        internal static Commission GetCommissionObj(int commissionId, double commissionAmount, double commissionPercentage)
+        internal static Commission GetCommissionObj(double commissionAmount, double commissionPercentage)
         {
-            var commission = new Commission { CommissionId = commissionId };
+            var commission = new Commission();
             if (commissionAmount > 0)
             {
                 commission.Amount = commissionAmount;
@@ -123,11 +123,10 @@ namespace Branch
             return (from DbTaxes x in context.DbTaxes
                     where x.Enabled == true
                     select new Tax
-            {
-                TaxId = x.Id,
-                Name = x.Name,
-                
-            }).FirstOrDefault();
+                    {
+                        Name = x.Name,
+
+                    }).FirstOrDefault();
         }
         internal static DbCustomers GetCustomer(int customerId)
         {
@@ -148,51 +147,16 @@ namespace Branch
         }
         internal static List<DbMenuAddons> GetMenuAddons(int itemId, POSContext context, bool includeDisabled = true)
         {
-            var list  = (from x in context.DbMenuAddons
-                    where x.MenuId == itemId
-                    select x).ToList();
+            var list = (from x in context.DbMenuAddons
+                        where x.MenuId == itemId
+                        select x).ToList();
             if (!includeDisabled)
                 list = (from x in list
                         where x.Enabled == true
                         select x).ToList();
             return list;
-                
 
-        }
-        internal static List<Deal> GetMenuDeals(int orderNo, POSContext context, bool includeDisabled = true)
-        {
-            var tax = GetDbTax();
-            var list = (from x in context.DbSalesMaster
-                        join a in context.DbSalesDetails on x.Id equals a.SalesMasterId
-                        join b in context.DbMenus on a.MenuId equals b.Id
-                        join c in context.DbMenuDetails on a.MenuDetailsId equals c.Id
-                        join d in context.DbCategories on b.CategoryId equals d.Id
-                        where x.OrderNo == orderNo
-                        select new Deal
-                        {
-                            ItemId = a.MenuId,
-                            Name = b.Name,
-                            UnitPrice = c.Price,
-                            Quantity = a.Quantity,
-                            Category = new Classes.Category
-                            {
-                                Id = d.Id,
-                                Name = d.Name,
-                            },
-                            Discount = GetItemDiscount(c.DiscountAmount, c.DiscountPercentage),
-                            DealItems = GetOrderDealItems(a.Id, context),
-                            Addons = GetOrderAddons(a.Id, context),
-                            Canceled = a.Canceled,
-                            Tax = new Classes.Tax
-                            {
-                                Percentage = tax.Percentage,
-                            }
 
-                        }).ToList();
-            if (!includeDisabled)
-                return (from x in list where x.Canceled == false select x).ToList();
-            else
-                return list;
         }
         internal static List<DealItem> GetOrderDealItems(int detailId, POSContext context)
         {
@@ -204,7 +168,6 @@ namespace Branch
                     where x.Id == detailId && d.ItemType == ItemType.Deal
                     select new DealItem
                     {
-                        ItemId = d.Id,
                         Name = d.Name,
                         Discount = GetItemDiscount(b.DiscountAmount, b.DiscountPercentage),
                         Quantity = x.Quantity,
@@ -224,7 +187,6 @@ namespace Branch
                     where x.Id == detailId
                     select new Addon
                     {
-                        AddonId = b.MenuAddonId,
                         Name = c.Name,
                         Price = c.Price,
                         Selected = true,
@@ -262,30 +224,72 @@ namespace Branch
                         where x.Id == menuId
                         select new DealItem
                         {
-                            ItemId = x.Id,
                             Name = x.Name,
                             UnitPrice = b.Price,
                             Quantity = 1,
-                            Category = (from xx in context.DbCategories where xx.Id == x.CategoryId select new Category { Id = xx.Id, Name = xx.Name, }).FirstOrDefault(),
+                            Category = (from xx in context.DbCategories where xx.Id == x.CategoryId select new Category { Name = xx.Name, }).FirstOrDefault(),
                             Choice = a.Choice,
                             Discount = GetItemDiscount(x.DiscountAmount, x.DiscountPercentage),
-                            Tax = new Tax { TaxId = tax.Id, Percentage = tax.Percentage },
-                            Canceled = false,
-                            Addons = (from xx in GetMenuAddons(x.Id, context, false) select new Addon { AddonId = xx.Id, Name = xx.Name, Price = xx.Price, Canceled = false, Selected = false }).ToList()
+                            Tax = new Tax { Percentage = tax.Percentage },
                         }).ToList();
             return list;
         }
-        internal static DbCategories GetCategories(int categoryId, POSContext context) => context.Find<DbCategories>(categoryId);
         internal static Counter GetCounter(POSContext context)
         {
-            return (from x in context.DbCounters where x.Name == Environment.MachineName select new Counter
-            {
-                Id = x.Id,
-                Name = x.Name,
-                UUID = x.UUID,
-                Enabled = x.Enabled
-            }).FirstOrDefault();
+            return (from x in context.DbCounters
+                    where x.Name == Environment.MachineName
+                    select new Counter
+                    {
+                        Name = x.Name,
+                        UUID = x.UUID,
+                    }).FirstOrDefault();
         }
-        
+        internal static Customer GetCustomerObj(DbCustomers customers)
+        {
+            return new Customer
+            {
+                Name = customers.Name,
+                Address = customers.Address,
+                Contact = customers.Contact,
+            };
+        }
+        internal static GeneralDiscount GetGeneralDiscountObj(DbDiscountsDetails discounts)
+        {
+            var discount = new GeneralDiscount
+            {
+                Name = discounts.Discounts.Name,
+                From = discounts.Start,
+                To = discounts.End,
+                DiscountType = discounts.DiscountType,
+            };
+            if (discounts.Amount > 0)
+            {
+                discount.Amount = discounts.Amount;
+                discount.AmountUnit = Units.Amount;
+            }
+            else if (discounts.Percentage > 0)
+            {
+                discount.Amount = discounts.Percentage;
+                discount.AmountUnit = Units.Percentage;
+            }
+            else
+            {
+                discount.Amount = 0;
+                discount.AmountUnit = Units.Undefined;
+            }
+            return discount;
+        }
+        internal static Counter GetCounterObj(DbCounters counters)
+        {
+            return new Counter
+            {
+                Name = counters.Name,
+                UUID = counters.UUID,
+            };
+        }
+        internal static Category GetCategoryObj(DbCategories categories)
+        {
+            return new Category{};
+        }
     }
 }

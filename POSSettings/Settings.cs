@@ -9,8 +9,6 @@ namespace Branch.POSSettings
         {
             get
             {
-                if (_boolSettings is null)
-                    _boolSettings = Data.GetSettings();
                 return _boolSettings;
             }
         }

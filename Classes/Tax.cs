@@ -4,7 +4,6 @@ namespace Branch.Classes
 {
     public class Tax
     {
-        internal int TaxId { get; set; }
         public string Name { get; set; }
         public double Percentage { get; set; }
         public double ApplyExclusive(double amount) => amount + (Percentage / 100);

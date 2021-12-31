@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj": {}
+    "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj": {}
   },
   "projects": {
-    "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj": {
+    "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj": {
       "version": "0.0.1",
       "restore": {
-        "projectUniqueName": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj",
+        "projectUniqueName": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj",
         "projectName": "Branch",
-        "projectPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj",
+        "projectPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj",
         "packagesPath": "/Users/avialdosolutions/.nuget/packages/",
-        "outputPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/",
+        "outputPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/avialdosolutions/.nuget/NuGet/NuGet.Config"
@@ -20,7 +20,7 @@
           "net5.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/POSDatabaseModel/bin/Debug": {}
         },
         "frameworks": {
           "net5.0": {
@@ -52,7 +52,11 @@
             },
             "POSDatabaseModel": {
               "target": "Package",
-              "version": "[0.0.1, )"
+              "version": "[0.0.8, )"
+            },
+            "RMSEnumerations": {
+              "target": "Package",
+              "version": "[1.0.10, )"
             }
           },
           "imports": [

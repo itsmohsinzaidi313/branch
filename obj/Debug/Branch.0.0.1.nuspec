@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/bin/Debug/net5.0/Branch.dll" target="lib/net5.0/Branch.dll" />
+    <file src="/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/bin/Debug/net5.0/Branch.dll" target="lib/net5.0/Branch.dll" />
   </files>
 </package>

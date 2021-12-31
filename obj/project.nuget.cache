@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uCvpIsMMvzXFGte3IsdCIQEHgfsguFvpqnIoxEET1XIFkrDJ27gn2xt1lsouJqdpxdLDvdXOn6xeXoUFxDctNw==",
+  "dgSpecHash": "V3TGNZ3tH74qKR4IKofQJ785hWOk0Zp0YgsGeDDjsSHdT9TQZWORrMQXrivhlRqaalXmNcfeMi50mYrJB3t8JQ==",
   "success": true,
-  "projectFilePath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj",
+  "projectFilePath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj",
   "expectedPackageFiles": [
     "/Users/avialdosolutions/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/microsoft.data.sqlclient/2.0.1/microsoft.data.sqlclient.2.0.1.nupkg.sha512",
@@ -33,8 +33,8 @@
     "/Users/avialdosolutions/.nuget/packages/microsoft.win32.registry/4.7.0/microsoft.win32.registry.4.7.0.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/newtonsoft.json/10.0.1/newtonsoft.json.10.0.1.nupkg.sha512",
-    "/Users/avialdosolutions/.nuget/packages/posdatabasemodel/0.0.1/posdatabasemodel.0.0.1.nupkg.sha512",
-    "/Users/avialdosolutions/.nuget/packages/rmsenumerations/1.0.9/rmsenumerations.1.0.9.nupkg.sha512",
+    "/Users/avialdosolutions/.nuget/packages/posdatabasemodel/0.0.8/posdatabasemodel.0.0.8.nupkg.sha512",
+    "/Users/avialdosolutions/.nuget/packages/rmsenumerations/1.0.10/rmsenumerations.1.0.10.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/runtime.native.system/4.3.0/runtime.native.system.4.3.0.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/system.collections/4.3.0/system.collections.4.3.0.nupkg.sha512",
     "/Users/avialdosolutions/.nuget/packages/system.collections.concurrent/4.3.0/system.collections.concurrent.4.3.0.nupkg.sha512",

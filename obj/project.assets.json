@@ -440,7 +440,7 @@
           "lib/netstandard1.3/Newtonsoft.Json.dll": {}
         }
       },
-      "POSDatabaseModel/0.0.1": {
+      "POSDatabaseModel/0.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.EntityframeworkCore": "5.0.12",
@@ -455,7 +455,7 @@
           "lib/net5.0/POSDatabaseModel.dll": {}
         }
       },
-      "RMSEnumerations/1.0.9": {
+      "RMSEnumerations/1.0.10": {
         "type": "package",
         "compile": {
           "lib/net5.0/RMSEnumerations.dll": {}
@@ -2224,25 +2224,25 @@
         "tools/install.ps1"
       ]
     },
-    "POSDatabaseModel/0.0.1": {
-      "sha512": "Y5zQEKgdTSyiczbr79hV/rvKopIa3LqkeB82DUBZduCEsdTO1dulQE8+GK0poUBycBKrNtElbqPmXrOcpdSF7g==",
+    "POSDatabaseModel/0.0.8": {
+      "sha512": "ya1VqEq8SbHXu6bb2J8RG4+V7Fg1d3qgSnqqnRSsKgclEphgfeHlo/OKDv7rbejllKA8hhCt/P57ZD/YraUk/w==",
       "type": "package",
-      "path": "posdatabasemodel/0.0.1",
+      "path": "posdatabasemodel/0.0.8",
       "files": [
         ".nupkg.metadata",
         "lib/net5.0/POSDatabaseModel.dll",
-        "posdatabasemodel.0.0.1.nupkg.sha512",
+        "posdatabasemodel.0.0.8.nupkg.sha512",
         "posdatabasemodel.nuspec"
       ]
     },
-    "RMSEnumerations/1.0.9": {
-      "sha512": "6kRfCdkv1k9Tu5vUT0IIGFNnj9KzQ+RoFQGsXrnKYqsJi/pY0BMpZP9i8DRQ685zeHAjO7WWkWi9e1AUJIUYIQ==",
+    "RMSEnumerations/1.0.10": {
+      "sha512": "cn9kQXXIpM3QQpeJXaRxwSM/tF7GJ9O5yq0bZ/TUF5Nt2cGFaayAtTTJGgLyvo6+FMYV0UaMYOiv6X5PYUY+iA==",
       "type": "package",
-      "path": "rmsenumerations/1.0.9",
+      "path": "rmsenumerations/1.0.10",
       "files": [
         ".nupkg.metadata",
         "lib/net5.0/RMSEnumerations.dll",
-        "rmsenumerations.1.0.9.nupkg.sha512",
+        "rmsenumerations.1.0.10.nupkg.sha512",
         "rmsenumerations.nuspec"
       ]
     },
@@ -5772,7 +5772,8 @@
       "Microsoft.EntityFrameworkCore >= 5.0.12",
       "Microsoft.EntityFrameworkCore.InMemory >= 5.0.12",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.12",
-      "POSDatabaseModel >= 0.0.1"
+      "POSDatabaseModel >= 0.0.8",
+      "RMSEnumerations >= 1.0.10"
     ]
   },
   "packageFolders": {
@@ -5781,11 +5782,11 @@
   "project": {
     "version": "0.0.1",
     "restore": {
-      "projectUniqueName": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj",
+      "projectUniqueName": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj",
       "projectName": "Branch",
-      "projectPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/Branch.csproj",
+      "projectPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/Branch.csproj",
       "packagesPath": "/Users/avialdosolutions/.nuget/packages/",
-      "outputPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/Branch/obj/",
+      "outputPath": "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/branch/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/Users/avialdosolutions/.nuget/NuGet/NuGet.Config"
@@ -5794,7 +5795,7 @@
         "net5.0"
       ],
       "sources": {
-        "https://api.nuget.org/v3/index.json": {}
+        "/Users/avialdosolutions/Documents/VSCode/RMS/PointofSale/POSDatabaseModel/bin/Debug": {}
       },
       "frameworks": {
         "net5.0": {
@@ -5826,7 +5827,11 @@
           },
           "POSDatabaseModel": {
             "target": "Package",
-            "version": "[0.0.1, )"
+            "version": "[0.0.8, )"
+          },
+          "RMSEnumerations": {
+            "target": "Package",
+            "version": "[1.0.10, )"
           }
         },
         "imports": [

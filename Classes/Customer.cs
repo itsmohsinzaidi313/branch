@@ -4,7 +4,6 @@ namespace Branch.Classes
 {
     public class Customer
     {
-        internal int Id { get; set; } = 0;
         public string Name { get; set; } = string.Empty;
         public string Contact { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -14,8 +13,7 @@ namespace Branch.Classes
             return obj is Customer customer &&
                    Address == customer.Address &&
                    Contact == customer.Contact &&
-                   Name == customer.Name &&
-                   Id == customer.Id;
+                   Name == customer.Name;
         }
 
         public override int GetHashCode()

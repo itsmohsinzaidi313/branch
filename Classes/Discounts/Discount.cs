@@ -13,7 +13,6 @@ namespace Branch.Classes.Discounts
                 Units.Amount => amount - (amount - Amount),
                 _ => amount,
             };
-
         public virtual double ApplyInclusive(double amount) => AmountUnit switch
         {
             Units.Percentage => amount - (amount * (Amount / 100)),
