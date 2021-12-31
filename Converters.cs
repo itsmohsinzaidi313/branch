@@ -39,10 +39,10 @@ public static class Converters
     }
     public static DbCustomers GetCustomer(Customer customer)
     {
-
+        
         return new DbCustomers
         {
-            
+
         };
     }
     public static Counter GetCounter(DbCounters counters)
@@ -176,8 +176,8 @@ public static class Converters
     {
         if (salesMaster == null)
             throw new NullReferenceException("DbSalesMaster cannot be null.");
-        if (salesMaster.Counters == null || salesMaster.DiscountDetail == null || salesMaster.ShiftLog == null || salesMaster.Users == null || salesMaster.SalesDetails == null || salesMaster.SaleDate == null)
-            throw new ObjectPropertyNullOrEmpty("DbSalesMaster", "DbCounters, DbWaiters, DbRiders, DbTables, DbCustomers, DbDiscountsDetails, DbShiftLogs, DbUsers, List<DbSalesDetails>, DateTime");
+        if (salesMaster.Counters == null || salesMaster.DiscountDetail == null || salesMaster.ShiftLog == null || salesMaster.Users == null || salesMaster.SalesDetails == null)
+            throw new ObjectPropertyNullOrEmpty("DbSalesMaster", "DbCounters, DbWaiters, DbRiders, DbTables, DbCustomers, DbDiscountsDetails, DbShiftLogs, DbUsers, List<DbSalesDetails>");
 
         if (salesMaster.OrderType == OrderType.DineInIndoor || salesMaster.OrderType == OrderType.DineInOutdoor)
         {
