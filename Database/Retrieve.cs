@@ -7,7 +7,7 @@ using Branch.Classes.Menu;
 using POSDatabaseModel.Models;
 using Branch.Classes.Discounts;
 
-namespace Branch
+namespace Branch.Database
 {
     public static class Retrieve
     {
@@ -30,11 +30,11 @@ namespace Branch
         public static IEnumerable<Item> GetItems(Database database, bool includeDisabled = false, bool includeTruncated = false)
         {
             var context = database.Context;
-            var list = (from x in context.DbMenus
-                        join a in context.DbMenuDetails on x.Id equals a.MenuId
-                        join b in context.DbCategories on x.CategoryId equals b.Id
-                        where x.ItemType == ItemType.Item
-                        select x).ToList();
+            var list = context.DbMenuDetails
+                        .Include(x => x.Menu)
+                            .ThenInclude(x => x.Category)
+                        .Where(x => x.Enabled == true)
+                        .ToList();
             if (includeDisabled)
                 list = (from x in list where x.Enabled == includeDisabled select x).ToList();
             if (includeTruncated)
@@ -45,10 +45,10 @@ namespace Branch
                     {
                         Category = new Category
                         {
-                            Name = x.Category.Name
+                            Name = x.Menu.Category.Name
                         },
-                        Name = x.Name,
-                        Addons = (from xx in x.MenuAddons
+                        Name = x.Menu.Category.Name,
+                        Addons = (from xx in x.Menu.MenuAddons
                                   select new Addon
                                   {
                                       Name = xx.Name,
@@ -58,7 +58,7 @@ namespace Branch
                         Quantity = 1,
                         Discount = Helpers.GetItemDiscount(x.DiscountAmount, x.DiscountPercentage),
                         Tax = new Tax { Percentage = x.TaxPercentage },
-                        UnitPrice = (from xx in x.MenuDetails where xx.Enabled == true select xx.Price).FirstOrDefault(),
+                        UnitPrice = (from xx in list where xx.Enabled == true select xx.Price).FirstOrDefault(),
                     }).ToList() ?? new List<Item>();
         }
         public static IEnumerable<MenuItem> GetMenus(Database database, bool includeDisabled = false, bool includeTruncated = false)
@@ -205,11 +205,10 @@ namespace Branch
         public static IEnumerable<Deal> GetDeals(Database database, bool includeDisabled = false, bool includeTruncated = false)
         {
             var context = database.Context;
-            var list = (from x in context.DbMenus
-                        join a in context.DbMenuDetails on x.Id equals a.MenuId into details
-                        join b in context.DbMenuDealItems on x.Id equals b.MenuId into dealItems
-                        where x.ItemType == ItemType.Deal
-                        select x).ToList();
+            var list = context.DbMenuDetails
+                        .Include(x => x.Menu)
+                            .ThenInclude(x => x.MenuDeals)
+                        .ToList();
             if (includeDisabled)
                 list = (from x in list where x.Enabled == true select x).ToList();
             if (includeTruncated)
@@ -217,7 +216,7 @@ namespace Branch
             return (from x in list
                     select new Deal
                     {
-                        Name = x.Name,
+                        Name = x.Menu.Name,
                         Quantity = 1,
                         Tax = Helpers.GetTax(),
                         Discount = Helpers.GetItemDiscount(x.DiscountAmount, x.DiscountPercentage),
@@ -327,7 +326,7 @@ namespace Branch
                         Counter = Helpers.GetCounterObj(x.Counters),
                         Customer = Helpers.GetCustomerObj(x.Customer),
                         Discount = Helpers.GetGeneralDiscountObj(x.DiscountDetail),
-                        
+
                     }).ToList();
         }
         internal static Dictionary<string, bool> GetSettings(Database database, bool includeDisabled = false)

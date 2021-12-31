@@ -6,6 +6,7 @@ using Branch.POSSettings;
 using RMSEnumerations;
 using System;
 using System.Collections.Generic;
+using Branch.Database;
 
 namespace Branch.Classes
 {

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Branch
+namespace Branch.Database
 {
     internal static class Helpers
     {
@@ -22,6 +22,16 @@ namespace Branch
             }
             return context.DbSalesMaster.Max(x => x.OrderNo) + 1;
         }
+
+        internal static DbDepartments GetDbDepartment(POSContext context, string name)
+        {
+            return (from x in context.DbCategories
+                    join a in context.DbDepartments on x.DepartmentId equals a.Id
+                    where x.Name.ToLower().Equals(name.ToLower()) && 
+                        x.Enabled == true && a.Enabled == true
+                    select a).FirstOrDefault();
+        }
+
         internal static int GetNewRandomOrderNumber()
         {
             using (POSContext context = new Database().Context)

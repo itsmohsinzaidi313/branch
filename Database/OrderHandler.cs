@@ -7,7 +7,7 @@ using System.Linq;
 using POSDatabaseModel;
 using POSDatabaseModel.Models;
 
-namespace Branch
+namespace Branch.Database
 {
     public static class OrderHandler
     {
